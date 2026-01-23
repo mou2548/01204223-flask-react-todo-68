@@ -78,12 +78,9 @@ def toggle_todo(id):
     db.session.commit()
     return jsonify(todo.to_dict())
 
-
 @app.route('/api/todos/<int:id>/', methods=['DELETE'])
 def delete_todo(id):
-    global todo_list
-    todos = [todo for todo in todo_list if todo['id'] == id]
-    if not todos:
-        return (jsonify({'error': 'Todo not found'}), 404)
-    todo_list = [todo for todo in todo_list if todo['id'] != id]
+    todo = TodoItem.query.get_or_404(id)
+    db.session.delete(todo)
+    db.session.commit()
     return jsonify({'message': 'Todo deleted successfully'})
