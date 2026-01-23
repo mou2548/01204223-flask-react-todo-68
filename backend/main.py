@@ -30,7 +30,10 @@ class TodoItem(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "done": self.done
+            "done": self.done,
+            "comments": [
+                comment.to_dict() for comment in self.comments
+            ]
         }
 
 class Comment(db.Model):
@@ -39,6 +42,13 @@ class Comment(db.Model):
     todo_id: Mapped[int] = mapped_column(ForeignKey('todo_item.id'))
 
     todo: Mapped["TodoItem"] = relationship(back_populates="comments")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "message": self.message,
+            "todo_id": self.todo_id
+        }
 
 # with app.app_context():
 #     db.create_all()
