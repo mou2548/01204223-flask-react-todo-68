@@ -11,13 +11,18 @@ function TodoItem({todo, toggleDone, deleteTodo, addNewComment}) {
       <button onClick={() => {deleteTodo(todo.id)}}>❌</button>
       {(todo.comments) && (todo.comments.length > 0) && (
               <>
-                <b>Comments:</b>
+                <b>Comments ({todo.comments.length}):</b>
                 <ul>
                   {todo.comments.map(comment => (
                     <li key={comment.id}>{comment.message}</li>
                   ))}
                 </ul>
               </>
+      )}
+      {(todo.comments.length == 0) && (
+        <>
+        <b>No comments</b>
+        </>
       )}
       <div className="new-comment-forms">
         <input
