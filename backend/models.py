@@ -17,7 +17,8 @@ class TodoItem(db.Model):
     title: Mapped[str] = mapped_column(String(100))
     done: Mapped[bool] = mapped_column(default=False)
 
-    comments: Mapped[list["Comment"]] = relationship(back_populates="todo")
+    comments: Mapped[list["Comment"]] = relationship(back_populates="todo", 
+                                                     cascade="all, delete")
 
     def to_dict(self):
         return {
@@ -32,7 +33,7 @@ class TodoItem(db.Model):
 class Comment(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     message: Mapped[str] = mapped_column(String(250))
-    todo_id: Mapped[int] = mapped_column(ForeignKey('todo_item.id'))
+    todo_id: Mapped[int] = mapped_column(ForeignKey('todo_item.id', ondelete="CASCADE"))
 
     todo: Mapped["TodoItem"] = relationship(back_populates="comments")
 
