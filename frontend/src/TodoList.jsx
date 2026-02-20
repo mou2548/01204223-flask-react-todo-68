@@ -29,7 +29,7 @@ function TodoList({apiUrl}) {
       const data = await response.json();
       setTodoList(data);
     } catch (err) {
-     //alert("Failed to fetch todo list from backend. Make sure the backend is running.");
+     alert("Failed to fetch todo list from backend. Make sure the backend is running.");
      setTodoList([]);
     }
   }
@@ -39,7 +39,10 @@ function TodoList({apiUrl}) {
     try {
       const response = await fetch(toggle_api_url, {
         method: 'PATCH',
-      })
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+        }
+      });
       if (response.ok) {
         const updatedTodo = await response.json();
         setTodoList(todoList.map(todo => todo.id === id ? updatedTodo : todo));
@@ -55,6 +58,7 @@ function TodoList({apiUrl}) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ 'title': newTitle }),
       });
@@ -73,6 +77,9 @@ function TodoList({apiUrl}) {
     try {
       const response = await fetch(delete_api_url, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
       });
       if (response.ok) {
         setTodoList(todoList.filter(todo => todo.id !== id));
@@ -89,6 +96,7 @@ function TodoList({apiUrl}) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ 'message': newComment }),    // ใช้ newComment
       });
@@ -116,8 +124,6 @@ function TodoList({apiUrl}) {
       </ul>
       New: <input type="text" value={newTitle} onChange={(e) => {setNewTitle(e.target.value)}} />
       <button onClick={() => {addNewTodo()}}>Add</button>
-      <br/>
-      <a href="/login">Login</a> 
       <br/>
       <a href="/about">About</a>
       <br/>
