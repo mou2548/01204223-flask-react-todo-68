@@ -1,2 +1,6 @@
 /instance
 .env
+/frontend-static
+/local_config.py
+/practicum*.json
+__pycache__
